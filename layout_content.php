@@ -17,34 +17,48 @@
       $iduser = $app->id;
 
      if (!empty($_POST['content'])) {
-
-        try {
-            $conn = new PDO("mysql:host=localhost;dbname=php_cs", 'root', 'root');
-            // set the PDO error mode to exception
-            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        
-            $stmt = $conn->prepare("SELECT id FROM users WHERE id='".$iduser."'"); 
-            $stmt->execute();
-            $result = $stmt->setFetchMode(PDO::FETCH_ASSOC); 
-            $tuto = $_POST['tuto'];
-            $sql = "INSERT INTO prime(users_id,photo) VALUES ('".$iduser."','".$tuto."')";
-            // use exec() because no results are returned
-        
-            $conn->exec($sql);
-        
-            echo "Connected successfully"; 
-            }
-        catch(PDOException $e)
-            {
-            echo "Connection failed: " . $e->getMessage();
-            }
-        $conn = null;
-
+        $user->addTable($iduser); 
     } 
 
 ?>
 
-<form action="index.php" method="post">
+<script  type="text/javascript" src="test.php"></script>
+
+<form action="index.html" method="post">
     <input type="text" placeholder="your content here" name="tuto">
     <input type="submit" name="content">
 </form>
+
+
+
+
+<h3>Add input :</h3>
+
+<h2><a href="#" id="addScnt" class="add">Add Another Input Box</a></h2>
+
+<div id="p_scents">
+    <p>
+        <label for="p_scnts"><input type="text" id="p_scnt" size="20" name="p_scnt" value="" placeholder="Input Value" /></label>
+    </p>
+</div>
+
+<div class="testo">
+test
+</div>
+
+
+<script>
+    
+    $(document).ready(function() { 
+        var i = 1;
+        $('.add').click(function(){
+            $('.testo').append('<p name="' + i + '" id="cool">testtddsd <a class="delete">delete</a></p>');
+            i++;
+        });   
+        $(".testo").find("#cool").find(".delete").click(function(){
+            alert('ok');
+        }); 
+    });
+
+
+</script>

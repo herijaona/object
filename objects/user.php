@@ -97,4 +97,24 @@ public function addPerso($tuto,$t){
     }
 }
 
+public function addTable($iduser){
+    try {
+        $stmt =  $this->conn->prepare("SELECT id FROM users WHERE id='".$iduser."'"); 
+        $stmt->execute();
+        $result = $stmt->setFetchMode(PDO::FETCH_ASSOC); 
+        $tuto = $_POST['tuto'];
+        $sql = "INSERT INTO prime(users_id,photo) VALUES ('".$iduser."','".$tuto."')";
+        // use exec() because no results are returned
+    
+        $this->conn->exec($sql);
+    
+        echo "Connected successfully"; 
+        }
+    catch(PDOException $e)
+        {
+        echo "Connection failed: " . $e->getMessage();
+        }
+        $this->conn = null;
+}
+
 }
