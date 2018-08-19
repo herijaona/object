@@ -1,6 +1,8 @@
 <?php
 // 'user' object
 class User{
+
+    public $attribut = 'Voici un attribut';
  
     // database connection and table name
     private $conn;
@@ -84,37 +86,72 @@ public function UserDetails($id)
     }
 }
 
-public function addPerso($tuto,$t){
-    try {
-        $query = $this->conn->prepare("INSERT INTO users(id, tuto)
-        SELECT $t
-        FROM users LEFT JOIN permis AS userS ON user.id = userS.users_id");
-        $query->bindParam("tuto", $tuto, PDO::PARAM_STR);
-        $query->execute();
-        return $db->lastInsertId();
-    } catch (PDOException $e) {
-        exit($e->getMessage());
+public function getCompany(){
+    global $db;
+    $q = $db->query('SELECT * FROM prime');
+    $u = $q->execute();
+    $resultado = $q->fetchAll();
+    return $resultado;
+}
+
+public function getid(){
+    global $db;
+    $q = $db->query('SELECT * FROM prime WHERE email = ?');
+    $q->bindParam(1, $_POST['tuto']);
+    $u = $q->execute();
+    $resultado = $q->fetchAll();
+    return $resultado ;
+}
+
+public function val_in_arr(){
+    global $db;
+    $getone = new User($db);
+    $res = $getone->getid();
+    foreach($res as $arr_val){
+      $v =  $arr_val['photo'];
+     $pieces = explode(" ",  $v);
+    echo $p = $pieces['0'];
     }
+    return false;
+  }
+public function error(){
+    return $this->attribut;
 }
 
 public function addTable($iduser){
-    try {
-        $stmt =  $this->conn->prepare("SELECT id FROM users WHERE id='".$iduser."'"); 
-        $stmt->execute();
-        $result = $stmt->setFetchMode(PDO::FETCH_ASSOC); 
-        $tuto = $_POST['tuto'];
-        $sql = "INSERT INTO prime(users_id,photo) VALUES ('".$iduser."','".$tuto."')";
-        // use exec() because no results are returned
+    global $db;
+    $getone = new User($db);
     
-        $this->conn->exec($sql);
-    
-        echo "Connected successfully"; 
-        }
-    catch(PDOException $e)
-        {
-        echo "Connection failed: " . $e->getMessage();
-        }
-        $this->conn = null;
-}
+    $err = $getone->error();
+
+    $em =$_POST['tuto'];
+    $q = $db->prepare('SELECT * FROM prime WHERE photo = ?');
+    $q->bindParam(1, $em, PDO::PARAM_INT);
+    $q->execute();
+    $resultado = $q->fetchAll();
+
+    if($resultado){
+        echo $err ;
+    }elseif($em == null){
+        echo 'tsisy';
+    }else{
+        try {
+            $tuto = $_POST['tuto'];
+            $sql = "INSERT INTO prime(users_id,photo) VALUES ('".$iduser."','".$tuto."')";
+            $this->conn->exec($sql);    
+            echo "Connected successfully"; 
+            }
+        catch(PDOException $e)
+            {
+            echo "Connection failed: " . $e->getMessage();
+            }
+            $this->conn = null;
+    }
+
+
+
+    }
+
+
 
 }

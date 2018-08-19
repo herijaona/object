@@ -1,41 +1,37 @@
 <!-- navbar -->
-<div class="navbar navbar-default navbar-static-top" role="navigation">
-    <div class="container-fluid">
- 
-        <div class="navbar-header">
-            <!-- to enable navigation dropdown when viewed in mobile device -->
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            </button>
- 
-            <!-- Change "Your Site" to your site name -->
-            <a class="navbar-brand" href="<?php echo $home_url; ?>">Your Site</a>
-        </div>
- 
-        <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-                <!-- link to the "Cart" page, highlight if current page is cart.php -->
-                <li <?php echo $page_title=="Index" ? "class='active'" : ""; ?>>
-                    <a href="<?php echo $home_url; ?>">Home</a>
-                </li>
-            </ul>
- 
-            <?php
+
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <a class="navbar-brand" href="#">Navbar</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarColor02">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Features</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Pricing</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">About</a>
+        </li>
+      </ul>
+      <?php
             if(isset($_SESSION['logged_in']) && $_SESSION['logged_in']==true && $_SESSION['access_level']=='Customer'){
                 ?>
                 <ul class="nav navbar-nav navbar-right">
-                    <li <?php echo $page_title=="Edit Profile" ? "class='active'" : ""; ?>>
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                            <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-                            &nbsp;&nbsp;<?php echo $_SESSION['firstname']; ?>
-                            &nbsp;&nbsp;<span class="caret"></span>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <?php echo $_SESSION['firstname']; ?>
                         </a>
-                        <ul class="dropdown-menu" role="menu">
-                            <li><a href="<?php echo $home_url; ?>logout.php">Logout</a></li>
-                        </ul>
+                    <li>
+                        <a class="nav-link"  href="<?php echo $home_url; ?>logout.php">Logout</a>
                     </li>
                 </ul>
                 <?php
@@ -58,9 +54,7 @@
                     <?php
                     }
             ?>
-             
-        </div><!--/.nav-collapse -->
- 
     </div>
-</div>
-<!-- /navbar -->
+  </nav>
+
+
