@@ -126,6 +126,8 @@ public function addTable($iduser){
 
     $em =$_POST['tuto'];
     $q = $db->prepare('SELECT * FROM prime WHERE photo = ?');
+    // compare si un champ existe deja
+    // return photo = nom du photo
     $q->bindParam(1, $em, PDO::PARAM_INT);
     $q->execute();
     $resultado = $q->fetchAll();
@@ -147,11 +149,23 @@ public function addTable($iduser){
             }
             $this->conn = null;
     }
+}
+public function deleteRow(){
+    global $db;
+    $id = $_POST['id'];
+    $photo = $_POST['photo'];
+    $stmt = $db->prepare( "DELETE FROM prime WHERE id =:id AND photo =:photo" );
+    $stmt->bindParam(':id', $id);
+    $stmt->bindParam(':photo', $photo);
+    $stmt->execute();
+}
 
-
-
-    }
-
-
+public function getRow(){
+    global $db;
+    $q = $db->query('SELECT * FROM prime WHERE id=34');
+    $u = $q->execute();
+    $resultado = $q->fetchAll();
+    return $resultado;
+}
 
 }

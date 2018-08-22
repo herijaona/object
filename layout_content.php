@@ -22,12 +22,31 @@
     } 
    
   $obj =  $user->getCompany();
+    print_r($obj);
+
+  if( isset($_POST['delete'])){
+    if( isset( $_POST['id'] ) && is_numeric( $_POST['id'] ) && $_POST['id'] > 0 && isset( $_POST['photo'] )  )
+    {
+        $user->deleteRow();
+    }
 
 
-  
+}
 
-  
 
+
+
+if (isset($_GET['id'])) 
+{
+    $b =  $user->getRow();
+    foreach($b as $t ){  
+         echo "----".$t['photo'];
+    }
+}
+else 
+{
+	echo 'Il faut renseigner un nom et un prénom !';
+}
 ?>
 
 <script  type="text/javascript" src="test.php"></script>
@@ -42,7 +61,14 @@
         <?php foreach($obj as $t ){  ?>
         <div class="col-3 mt-2 mb-2">
             <div class="border p-3">
-                <?php  echo $t['photo'];  ?>
+                <span class="poire"><?php  echo $t['photo'];  ?></span>
+                <form action="index.html" method="post">
+                    <input type="hidden" name="delete" value="yes" />
+                    <input type="hidden" name="photo" value="<?php echo $t['photo'] ?>" />
+                    <input type="hidden" name="id" value="<?php echo $t['id'] ?>" />
+                    <input type="submit" class="button" name="delete" value="DELETE NEWS" />
+                </form>
+                <a href="http://localhost/phpcrn/index.html?<?php ?>">More</a>
             </div>
         </div>
         <?php }  ?>
