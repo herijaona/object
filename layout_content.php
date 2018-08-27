@@ -10,11 +10,12 @@
 
     $user = new User($db);
 
-    $app = $user->UserDetails($_SESSION['user_id']); 
+    $app = $user->UserDetails($_SESSION['users_id']); 
 
+    echo  $_SESSION['users_id'];
      echo $app->firstname;
      echo $app->id;
-      $iduser = $app->id;
+     $iduser = $app->id;
 
      if (!empty($_POST['content'])) {
         
@@ -22,7 +23,13 @@
     } 
    
   $obj =  $user->getCompany();
-    print_r($obj);
+    // print_r($obj);
+
+
+ $top = $user->getOnecompany($_SESSION['users_id']);
+
+// $user->testo();
+
 
   if( isset($_POST['delete'])){
     if( isset( $_POST['id'] ) && is_numeric( $_POST['id'] ) && $_POST['id'] > 0 && isset( $_POST['photo'] )  )
@@ -30,11 +37,7 @@
         $user->deleteRow();
     }
 
-
 }
-
-
-
 
 if (isset($_GET['id'])) 
 {
@@ -58,6 +61,29 @@ else
 
 <div class="container">
     <div class="row">
+    <?php while ($donnees =  $top->fetch())  {  ?>
+    <div class="col-3 mt-2 mb-2">
+        <div class="border p-3">
+            <span class="poire"><?php  echo $donnees['photo'];  ?></span>
+            <form action="index.html" method="post">
+                <input type="hidden" name="delete" value="yes" />
+                <input type="hidden" name="photo" value="<?php echo $donnees['photo'] ?>" />
+                <input type="hidden" name="id" value="<?php echo $donnees['id'] ?>" />
+                <input type="submit" class="button" name="delete" value="DELETE NEWS" />
+            </form>
+            <div class=" row"><input class="mt-2" type="text"><button>send</button></div>
+        </div>
+    </div>
+    <?php } ?>
+    </div>
+</div>
+
+
+
+
+<!-- affiche all company -->
+<!-- <div class="container">
+    <div class="row">
         <?php foreach($obj as $t ){  ?>
         <div class="col-3 mt-2 mb-2">
             <div class="border p-3">
@@ -73,7 +99,7 @@ else
         </div>
         <?php }  ?>
     </div>
-</div>
+</div> -->
 
 
 <!-- <h3>Add input :</h3>
