@@ -29,6 +29,7 @@
                     <li class="nav-item">
                         <a href="#" class="nav-link">
                             <?php echo $_SESSION['firstname']; ?>
+                            <?php echo $_SESSION['firstname']; ?>
                         </a>
                     <li>
                         <a class="nav-link"  href="<?php echo $home_url; ?>logout.php">Logout</a>

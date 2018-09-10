@@ -211,9 +211,11 @@ public function create(){
     $password_hash = password_hash($this->password, PASSWORD_BCRYPT);
     $stmt->bindParam(':password', $password_hash);
  
-    $stmt->bindParam(':access_level', $this->access_level);
+    $stmt->bindParam(':access_level', $admin);
     $stmt->bindParam(':status', $this->status);
     $stmt->bindParam(':created', $this->created);
+
+    $admin = 'admin';
  
     // execute the query, also check if query was successful
     if($stmt->execute()){
@@ -245,7 +247,6 @@ public function getOnecompany($users_id){
     // }
         return $q;
 
-
 }
 
 // OR
@@ -261,6 +262,150 @@ public function getOnecompany($users_id){
 // }
 
 // }
+
+public function addChef(){
+
+    try {
+        $idphoto = $_POST['idphoto'];
+        $lev = $_POST['level'];
+        $tuto = $_POST['rec'];
+        $sql = "INSERT INTO users(email,access_level) VALUES ('".$tuto."','".$lev."')";
+        $this->conn->exec($sql);    
+        echo "Connected successfully"; 
+        }
+    catch(PDOException $e)
+        {
+        echo "Connection failed: " . $e->getMessage();
+        }
+        $this->conn = null;
+}
+
+public function addId($iv){
+
+        $idphoto = $_POST['idphoto'];
+        $tuto = $_POST['rec'];
+
+        global $db;
+        $stmt =  $db->prepare("INSERT INTO sendmail (email, id_prime, users_id) VALUES (?, ?, ?)");
+        $stmt->bindParam(1, $tuto);
+        $stmt->bindParam(2, $idphoto);
+        $stmt->bindParam(3, $iv);
+
+        $stmt->execute();
+
+}
+
+public function Testmail(){
+    
+    if(isset($_POST['rec']) AND isset($_POST['level']) ){
+
+    global $db;
+    $q = $db->prepare('SELECT * FROM users WHERE (email = :email AND access_level = :access_level)');
+    // compare si un champ existe deja
+    // return photo = nom du photo
+
+    // $q->bindParam(1, $_POST['rec'], PDO::PARAM_INT);
+    // $q->bindParam(1,$_POST['level']], PDO::PARAM_INT);
+    // $q->execute(array());
+
+    $q->execute([
+        'email' => $_POST['rec'],
+        'access_level' =>  $_POST['level']
+    ]);
+
+    $resultado = $q->fetchAll();
+    return $resultado;
+
+    print_r($resultado);
+
+    }
+}
+
+
+
+public function getfreejoin($m){
+    global $db;
+    $q =  $db->prepare("SELECT e.lastname, u.photo,u.id,u.users_id,c.id_prime
+                        FROM users AS e 
+                        INNER JOIN prime AS u ON e.id = u.users_id 
+                        INNER JOIN chefdeservice c
+                        ON u.id = c.id_prime
+                        WHERE users_id=:users_id");
+    $q->bindParam("users_id", $m, PDO::PARAM_STR);
+    $q->execute();
+    $i =  $q->fetchAll();
+     
+    // return $i;
+
+    var_dump($i);
+
+}
+
+
+// public function getPrime(){
+//     global $db;
+//     $q = $db->query('SELECT * FROM prime WHERE users_id=1');
+//     $u = $q->execute();
+//     $resultado = $q->fetchAll();
+//     var_dump($resultado);
+// }
+
+public function getPrime($e){
+    global $db;
+    $q = $db->prepare('SELECT * FROM prime WHERE users_id = 1');
+    // compare si un champ existe deja
+    // return photo = nom du photo
+    $q->bindParam(1, $e, PDO::PARAM_INT);
+    $q->execute();
+    $resultado = $q->fetchAll();
+    var_dump($resultado);
+    return $resultado;
+}
+
+
+
+
+public function getsociete($p){
+    
+    global $db;
+    $q =  $db->prepare("SELECT e.lastname, u.photo,u.users_id
+                        FROM users AS e 
+                        INNER JOIN prime AS u ON e.id = u.users_id 
+                        WHERE users_id =:users_id");
+   $q->bindParam("users_id", $p, PDO::PARAM_INT);
+    
+  $q->execute();
+   
+     $i =  $q->fetch();
+
+    var_dump($i);
+     
+    return $i;
+
+}
+
+public function addsaisie($d,$t,$iu,$ip){
+    global $db;
+    $stmt =  $db->prepare("INSERT INTO saisie 
+                          (description, temperature, id_users, id_prime) 
+                           VALUES (?, ?, ?, ?)");
+    $stmt->bindParam(1, $d);
+    $stmt->bindParam(2, $t);
+    $stmt->bindParam(3, $iu);
+    $stmt->bindParam(4, $ip);
+    $stmt->execute();
+}
+
+
+public function selectRow(){
+    global $db;
+    $id = $_GET['id'];
+    $photo = $_POST['photo'];
+    $stmt = $db->prepare( "SELECT id FROM prime WHERE id =:id AND photo =:photo" );
+    $stmt->bindParam(':id', $id);
+    $stmt->bindParam(':photo', $photo);
+    $stmt->execute();
+}
 
 
 
